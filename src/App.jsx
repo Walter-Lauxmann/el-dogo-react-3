@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import FormularioCliente from './components/FormularioCliente';
+import ClienteItem from './components/clienteItem';
 import './App.css';
 
 function App() {
@@ -11,6 +12,27 @@ function App() {
 
   const agregarNuevoCliente = (nuevoCliente) => {
     setClientes([...clientes, nuevoCliente]);
+  }
+
+  const eliminarCliente = (clienteId) => {
+    const listaActualizada = clientes.filter(cliente =>
+      cliente.id !== clienteId
+    );
+
+    setClientes(listaActualizada);
+
+  }
+
+  const actualizarCliente = (clienteActualizado) => {
+    const listaActualizada = clientes.map(cliente => {
+      if (cliente.id === clienteActualizado.id) {
+        return clienteActualizado;
+      }
+
+      return cliente;
+    });
+
+    setClientes(listaActualizada);
   }
 
   return (
@@ -30,9 +52,12 @@ function App() {
           <ul>
             {
             clientes.map((cliente) => (
-              <li key={cliente.id}>
-                ** {cliente.nombre} ** - Teléfono: {cliente.telefono}
-              </li>
+              <ClienteItem 
+                key={cliente.id} 
+                cliente={cliente}
+                onEliminar={eliminarCliente}
+                onGuardar={actualizarCliente}
+              />
             ))
             }
           </ul>
