@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import FormularioCliente from './components/FormularioCliente';
 import ClienteItem from './components/clienteItem';
 import Login from './components/Login';
@@ -6,10 +6,12 @@ import './App.css';
 
 function App() {
   const nombreApp = "El Dogo - Gestión de veterinaria";
-  const [clientes, setClientes] = useState([
-    {id: 1, nombre: 'Juan Perez', telefono: '11123654789'},
-    {id: 2, nombre: 'Ana Gomez', telefono: '11987456321'}
-  ]);
+  const [clientes, setClientes] = useState(() => {
+    const datosGuardados = localStorage.getItem('clientesDogo') | [];
+    return datosGuardados ? JSON.parse(datosGuardados) : [];
+  }
+
+  );
 
   const [estaLogueado, setEstaLogueado] = useState(false);
 
@@ -41,6 +43,11 @@ function App() {
 
     setClientes(listaActualizada);
   }
+
+  useEffect(() => {
+    console.log("Detectando cambios en la lista de clientes. ¡Guardando!");
+    localStorage.setItem('clientesDogo', JSON.stringify(clientes));
+  }, [clientes]);
 
   return (
     <>   
