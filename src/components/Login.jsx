@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 function Login ({ onLoginExitoso }) {
-    const [password, setPassword] = useState(false);
+    const [password, setPassword] = useState('');
     const PASSWORD_SECRETA = 'elDogo2026';
 
     const manejadorEnviar = (e) => {
