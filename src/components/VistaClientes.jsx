@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import FormularioCliente from './FormularioCliente';
 import ClienteItem from './clienteItem';
 
+import styles from './VistaClientes.module.css';
+
 function VistaClientes() {
 
     const [clientes, setClientes] = useState(() => {
@@ -40,10 +42,10 @@ function VistaClientes() {
   }, [clientes]);
 
   return (
-    <div>
+    <div className={styles.contenedorPrincipal}>
           <section>
-            <h2>Gestión de clientes</h2>
-            <p>Cantidad de clientes: ** {clientes.length} **</p>
+            <h2 className={styles.titulo}>Gestión de clientes</h2>
+            <p className={styles.contador}>Cantidad de clientes: ** {clientes.length} **</p>
             <hr />
             <FormularioCliente onClienteAgregado={agregarNuevoCliente} />
             <ul>

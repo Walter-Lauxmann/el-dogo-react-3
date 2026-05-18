@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import styles from './MascotaItem.module.css';
+
 function MascotaItem ({clientes, mascota, onEliminar, onGuardar}) {
 
     const getDuenio = (id) => {
@@ -40,9 +42,9 @@ function MascotaItem ({clientes, mascota, onEliminar, onGuardar}) {
     }
 
     return (
-        <li key={mascota.id}>
+        <li key={mascota.id} className={styles.tarjetaMascota}>
             {esEdicion ? (
-                <form onSubmit={manejadorGuardar}>
+                <form onSubmit={manejadorGuardar} className={styles.modoEdicion}>
                     <input 
                         type="text" 
                         value={nombreEditado}
@@ -78,14 +80,18 @@ function MascotaItem ({clientes, mascota, onEliminar, onGuardar}) {
                     </button>
                 </form>
             ) : (
-                <>
-                    ** {mascota.nombre } **
+                <div className={styles.infoMascota}>
+                    <strong className={styles.nombreMascota}>** {mascota.nombre } **</strong>
                     - Especie: {mascota.especie}
                     - Raza: {mascota.raza}
-                    - Dueño: {getDuenio(mascota.clienteId)}
-                    <button onClick={manejadorEditar}>Editar</button>
-                    <button onClick={manejadorEliminar}>Eliminar</button>
-                </>
+                    <span className={styles.duenio}>
+                        - Dueño: {getDuenio(mascota.clienteId)}
+                    </span>
+                    <div className={styles.acciones}>
+                        <button onClick={manejadorEditar}>Editar</button>
+                        <button onClick={manejadorEliminar}>Eliminar</button>
+                    </div>
+                </div>
             )}
         </li>
     )
