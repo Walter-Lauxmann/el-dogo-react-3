@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 function ClienteItem({ cliente, onEliminar, onGuardar }) {
     
@@ -51,7 +52,10 @@ function ClienteItem({ cliente, onEliminar, onGuardar }) {
                     </form>
                 ) : (
                     <div>
-                        ** {cliente.nombre} ** - Teléfono: {cliente.telefono}
+                        <Link to={`/cliente/${cliente.id}`}>
+                            <strong>** {cliente.nombre} **</strong>
+                        </Link>
+                         - Teléfono: {cliente.telefono}
                         <button onClick={manejadorEditar}> 👍 Editar</button>
                         <button onClick={manejadorEliminar}> 💥 Eliminar</button>
                     </div>
