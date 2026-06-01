@@ -1,15 +1,13 @@
-import { useState } from "react";
+import { useContext } from 'react';
+import { VeterinariaContext } from '../context/VeterinariaContext';
+
 import { useParams, Link } from "react-router-dom";
 
 function VistaDetalleCliente() {
-    const [clientes] = useState(() => {
-        const datosGuardados = localStorage.getItem('clientesDogo');
-        return datosGuardados ? JSON.parse(datosGuardados) : [];
-    });
-    const [mascotas] = useState(() => {
-        const datosGuardados = localStorage.getItem('mascotasDogo');
-        return datosGuardados ? JSON.parse(datosGuardados) : [];
-    });
+    const {
+        clientes,
+        mascotas
+    } = useContext(VeterinariaContext);
 
     const { id: clienteIdString } = useParams();
     const clienteId = Number(clienteIdString);

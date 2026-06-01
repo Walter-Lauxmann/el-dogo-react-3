@@ -8,6 +8,7 @@ import VistaClientes from './components/VistaClientes';
 import VistaMascotas from './components/VistaMascotas';
 import VistaConfiguracion from './components/VistaConfiguracion';
 import VistaDetalleCliente from './components/VistaDetalleCliente';
+import { VeterinariaProvider } from './context/VeterinariaProvider';
 
 import './App.css';
 
@@ -25,7 +26,7 @@ function App() {
         <h1> {nombreApp} </h1>
         <p>¡Bienvenido! Acá se gestionan los Clientes y las Mascotas</p>
       {estaLogueado ? (
-        <>
+        <VeterinariaProvider>
           <Navegacion />
 
           <Routes>
@@ -35,7 +36,7 @@ function App() {
             <Route path="/config" element={<VistaConfiguracion />} />
             <Route path="*" element={<h2>404 - Página no encontrada</h2>} />
           </Routes>
-        </>
+        </VeterinariaProvider>
       ) : (
         <div>
           <Login onLoginExitoso={manejadorLogin} />
