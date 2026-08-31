@@ -74,9 +74,6 @@ export const VeterinariaProvider = ({ children }) => {
     localStorage.setItem('clientesDogo', JSON.stringify(clientes));
   }, [clientes]);
 
-  
-
-
     const agregarMascota = (nuevaMascota) => {
         setMascotas([...mascotas, nuevaMascota]);
     }
