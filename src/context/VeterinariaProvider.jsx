@@ -1,49 +1,80 @@
 import { useState, useEffect } from "react";
 import { VeterinariaContext } from "./VeterinariaContext";
+import api from "../api/axios";
 
 export const VeterinariaProvider = ({ children }) => {
-    // CLIENTES
+  // CLIENTES
+  const [clientes, setClientes] = useState([]);
+  // MASCOTAS
+  const [mascotas, setMascotas] = useState([]);
 
-    const [clientes, setClientes] = useState(() => {
-      const datosGuardados = localStorage.getItem('clientesDogo');
-      return datosGuardados ? JSON.parse(datosGuardados) : [];
-    });
+  const [isLoading, setIsLoading] = useState(true);
 
-  const agregarNuevoCliente = (nuevoCliente) => {
-    setClientes([...clientes, nuevoCliente]);
-  }
+  // Lógica de carga de datos inicial (GET - READ)
 
-  const eliminarCliente = (clienteId) => {
-    const listaActualizada = clientes.filter(cliente =>
-      cliente.id !== clienteId
-    );
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Peticiones simultáneaas para Clientes y Mascotas
+        const [clientesRes, mascotasRes] = await Promise.all ([
+          api.get('/clientes'),
+          api.get('/mascotas')
+        ]);
 
-    setClientes(listaActualizada);
-
-  }
-
-  const actualizarCliente = (clienteActualizado) => {
-    const listaActualizada = clientes.map(cliente => {
-      if (cliente.id === clienteActualizado.id) {
-        return clienteActualizado;
+        setClientes(clientesRes.data);
+        setMascotas(mascotasRes.data);
+      } catch (error) {
+        console.error("Error al cargar los datos desde la API:", error);
+      } finally {
+        setIsLoading(false);
       }
+    };
 
-      return cliente;
-    });
+    fetchData();
+  }, []);
 
-    setClientes(listaActualizada);
-  }
+  // Funciones de Clientes (CREATE, UPDATE, DELETE)
+  const agregarNuevoCliente = async (nuevoCliente) => {
+    try {
+      const response = await api.post('/clientes', nuevoCliente);
+      setClientes([...clientes, response.data]);
+    } catch (error) {
+      console.error("Error al agregar el cliente: ", error);
+    }
+  };
+
+  const eliminarCliente = async (clienteId) => {
+    try {
+      await api.delete(`/clientes/${clienteId}`);
+      const listaActualizada = clientes.filter(cliente =>
+        cliente.id !== clienteId
+      );  
+      setClientes(listaActualizada);
+    } catch (error) {
+      console.error("Error al eliminar el cliente: ", error);
+    }
+  };
+
+  const actualizarCliente = async (clienteActualizado) => {
+    try {
+      await api.put(`/clientes/${clienteActualizado.id}`, clienteActualizado);
+      const listaActualizada = clientes.map(cliente => {
+        if (cliente.id === clienteActualizado.id) {
+          return clienteActualizado;
+        } 
+      });
+      setClientes(listaActualizada);
+    } catch (error) {
+      console.error("Error al actualizar el cliente: ", error);
+    }
+  };  
 
   useEffect(() => {
     console.log("Detectando cambios en la lista de clientes. ¡Guardando!");
     localStorage.setItem('clientesDogo', JSON.stringify(clientes));
   }, [clientes]);
 
-  // MASCOTAS
-  const [mascotas, setMascotas] = useState(() => {
-        const mascotasGuardadaas = localStorage.getItem("mascotasDogo");
-        return mascotasGuardadaas ? JSON.parse(mascotasGuardadaas) : [];
-    });
+  
 
 
     const agregarMascota = (nuevaMascota) => {
